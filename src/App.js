@@ -25,24 +25,25 @@ function App() {
     .then(response => response.text())
     .then((data) => {
       let parser = new DOMParser();
-      let xml = parser.parseFromString(data, "text/xml");
+      let xml = parser.parseFromString(data, "text/xml");//tạo xml lấy dữ liệu từ file.xml đã fetch
 
-      let pointArr = [];
-      let pointTag = xml.getElementsByTagName("POINT");
+      let pointArr = [];//tạo 1 mảng pointArr
+      let pointTag = xml.getElementsByTagName("POINT");// lấy dữ liệu từ các POINT (tọa độ điểm) từ  file xml
       for (let i = 0; i < pointTag.length; i++) {
-        let pointAtt = pointTag[i].getAttribute("data");
-        pointArr.push(pointAtt.split(", "));
+        let pointAtt = pointTag[i].getAttribute("data");// lấy tọa độ các điểm từ data trong POINT
+        pointArr.push(pointAtt.split(", "));// đẩy dữ liệu điểm vừa lấy vào trong mảng pointArr
       }
 
-      let arr = pointArr.toString().split(',').map(parseFloat);
+      let arr = pointArr.toString().split(',').map(parseFloat);//tạo mảng arr chứa các tọa độ
 
       let size = 3;
       let arrOfArrs = [];
       for (let i = 0; i < arr.length; i += size) {
-        arrOfArrs.push(arr.slice(i, i + size));
+        arrOfArrs.push(arr.slice(i, i + size));//tạo mảng arrOfArrs chứa các mảng con, mỗi mảng con chứa 3 giá trị tọa độ của 1 điểm
       }
+      // console.log(arrOfArrs);
       console.log(arrOfArrs);
-
+      //mỗi Fi dưới đây là 1 hình với các điểm có tọa độ là arrOfArrs
       let F0 = [...arrOfArrs[0], ...arrOfArrs[1], ...arrOfArrs[2], ...arrOfArrs[3], ...arrOfArrs[4], ...arrOfArrs[5], ...arrOfArrs[6]];
       let F1 = [...arrOfArrs[7], ...arrOfArrs[8], ...arrOfArrs[9], ...arrOfArrs[10], ...arrOfArrs[11], ...arrOfArrs[12], ...arrOfArrs[13]];
       let F2 = [...arrOfArrs[14], ...arrOfArrs[15], ...arrOfArrs[16], ...arrOfArrs[17]];
@@ -52,10 +53,12 @@ function App() {
       let F6 = [...arrOfArrs[28], ...arrOfArrs[29], ...arrOfArrs[30]];
       let F7 = [...arrOfArrs[31], ...arrOfArrs[32], ...arrOfArrs[33]];
 
+//ở dưới là phần hiển thị hình ảnh 
+
       let Polygon0 = viewer.entities.add({
         polygon: {
           hierarchy: Cartesian3.fromDegreesArrayHeights(F0),
-          perPositionHeight: true,
+          perPositionHeight: true,//đặt chiều cao đúng với các tọa độ, nếu là false, hình sẽ nằm sát mạt đất
           material: Color.AQUAMARINE.withAlpha(0.5),
           outline: true,
           outlineColor: Color.AQUAMARINE,
@@ -140,7 +143,7 @@ function App() {
       });
       Polygon7.name = 'F7';
 
-      viewer.zoomTo(Polygon1);
+      viewer.zoomTo(Polygon1);//zoom vào hình khi mở app lên
     });
 
   return (
